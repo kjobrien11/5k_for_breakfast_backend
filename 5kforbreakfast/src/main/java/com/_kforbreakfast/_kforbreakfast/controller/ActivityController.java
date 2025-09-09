@@ -1,7 +1,7 @@
 package com._kforbreakfast._kforbreakfast.controller;
 
+import com._kforbreakfast._kforbreakfast.DTO.CompleteActivityRequest;
 import com._kforbreakfast._kforbreakfast.DTO.DailyActivityDTO;
-import com._kforbreakfast._kforbreakfast.model.DailyActivity;
 import com._kforbreakfast._kforbreakfast.service.DailyActivityService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +13,15 @@ import java.util.List;
 public class ActivityController {
 
     @Autowired
-    private DailyActivityService activityService;
+    private DailyActivityService dailyActivityService;
 
     @GetMapping("/all")
     public List<DailyActivityDTO> getAllActivities() {
-        return activityService.getAllActivities();
+        return dailyActivityService.getAllActivities();
+    }
 
+    @PostMapping("/complete")
+    public DailyActivityDTO markComplete(@RequestBody CompleteActivityRequest request){
+        return dailyActivityService.markComplete(request.date(), request.activityId());
     }
 }

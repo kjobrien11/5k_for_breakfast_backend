@@ -9,7 +9,7 @@ public class Activity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(columnDefinition = "BIGINT") // Ensure DB type alignment
+    @Column(columnDefinition = "BIGINT")
     private Long id;
 
     @Column(nullable = false)
@@ -18,11 +18,9 @@ public class Activity {
     @Column(length = 500)
     private String description;
 
-    // DB handles created_at automatically
     @Column(name = "created_at", updatable = false, insertable = false)
     private LocalDateTime createdAt;
 
-    // DB handles updated_at automatically
     @Column(name = "updated_at", insertable = false, updatable = false)
     private LocalDateTime updatedAt;
 
@@ -33,8 +31,6 @@ public class Activity {
         this.title = title;
         this.description = description;
     }
-
-    // --- Getters and Setters ---
 
     public Long getId() {
         return id;

@@ -12,7 +12,6 @@ public class DailyActivity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Each DailyActivity is tied to one Activity
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "activity_id", nullable = false)
     private Activity activity;
@@ -23,7 +22,6 @@ public class DailyActivity {
     @Column(name = "is_complete", nullable = false)
     private Boolean isComplete = false;
 
-    // DB manages this timestamp
     @Column(name = "updated_at", insertable = false, updatable = false)
     private LocalDateTime updatedAt;
 
@@ -35,8 +33,6 @@ public class DailyActivity {
         this.date = date;
         this.isComplete = false;
     }
-
-    // --- Getters and Setters ---
 
     public Long getId() {
         return id;
