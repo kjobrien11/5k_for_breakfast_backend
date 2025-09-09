@@ -20,8 +20,18 @@ public class ActivityController {
         return dailyActivityService.getAllActivities();
     }
 
+    @GetMapping("/today")
+    public List<DailyActivityDTO> getTodaysActivities() {
+        return dailyActivityService.getTodaysActivities();
+    }
+
     @PostMapping("/complete")
     public DailyActivityDTO markComplete(@RequestBody CompleteActivityRequest request){
         return dailyActivityService.markComplete(request.date(), request.activityId());
+    }
+
+    @PostMapping("/uncomplete")
+    public DailyActivityDTO markUnComplete(@RequestBody CompleteActivityRequest request){
+        return dailyActivityService.markUnComplete(request.date(), request.activityId());
     }
 }
