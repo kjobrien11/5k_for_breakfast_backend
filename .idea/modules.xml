@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/5k_for_breakfast_backend.iml" filepath="$PROJECT_DIR$/.idea/5k_for_breakfast_backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/5kforbreakfast/5kforbreakfast.iml" filepath="$PROJECT_DIR$/5kforbreakfast/5kforbreakfast.iml" />
     </modules>
   </component>
 </project>

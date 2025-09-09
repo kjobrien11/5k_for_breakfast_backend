@@ -1,30 +1,40 @@
 package com._kforbreakfast._kforbreakfast.model;
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "activity")
+@Table(name = "activities")
 public class Activity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "BIGINT") // Ensure DB type alignment
     private Long id;
 
     @Column(nullable = false)
-    private String userName;
+    private String title;
 
-    private String caption;
+    @Column(length = 500)
+    private String description;
 
-    @Column(nullable = false)
-    private LocalDateTime uploadDatetime;
+    // DB handles created_at automatically
+    @Column(name = "created_at", updatable = false, insertable = false)
+    private LocalDateTime createdAt;
 
-    private Double pace;
+    // DB handles updated_at automatically
+    @Column(name = "updated_at", insertable = false, updatable = false)
+    private LocalDateTime updatedAt;
 
-    private String filePath;
+    public Activity() {
+    }
 
-    private String tags;
+    public Activity(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
 
-    private String location;
+    // --- Getters and Setters ---
 
     public Long getId() {
         return id;
@@ -34,74 +44,38 @@ public class Activity {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getTitle() {
+        return title;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getCaption() {
-        return caption;
+    public String getDescription() {
+        return description;
     }
 
-    public void setCaption(String caption) {
-        this.caption = caption;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public LocalDateTime getUploadDatetime() {
-        return uploadDatetime;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setUploadDatetime(LocalDateTime uploadDatetime) {
-        this.uploadDatetime = uploadDatetime;
-    }
-
-    public Double getPace() {
-        return pace;
-    }
-
-    public void setPace(Double pace) {
-        this.pace = pace;
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-    public String getTags() {
-        return tags;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
     @Override
     public String toString() {
         return "Activity{" +
                 "id=" + id +
-                ", userName='" + userName + '\'' +
-                ", caption='" + caption + '\'' +
-                ", uploadDatetime=" + uploadDatetime +
-                ", pace=" + pace +
-                ", filePath='" + filePath + '\'' +
-                ", tags='" + tags + '\'' +
-                ", location='" + location + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
                 '}';
     }
 }
-
