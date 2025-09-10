@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface DailyActivityRepository extends JpaRepository<DailyActivity, Long> {
     Optional<DailyActivity> findByDateAndActivityId(LocalDate date, Long activityId);
     List<DailyActivity> findByDate(LocalDate date);
+    boolean existsByDate(LocalDate date);
 }
 
 
