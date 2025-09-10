@@ -2,6 +2,7 @@ package com._kforbreakfast._kforbreakfast.service;
 
 import com._kforbreakfast._kforbreakfast.DTO.ActivityDTO;
 import com._kforbreakfast._kforbreakfast.DTO.DailyActivityDTO;
+import com._kforbreakfast._kforbreakfast.DTO.ProgressDTO;
 import com._kforbreakfast._kforbreakfast.model.Activity;
 import com._kforbreakfast._kforbreakfast.model.DailyActivity;
 import com._kforbreakfast._kforbreakfast.repository.ActivityRepository;
@@ -74,6 +75,22 @@ public class DailyActivityService {
                         da.getActivity().getDescription()
                 )
         );
+    }
+
+    public ProgressDTO progressToday(){
+        LocalDate today = LocalDate.now();
+
+        List<DailyActivity> todaysActivities = dailyActivityRepository
+                .findByDate(today);
+
+        int total = todaysActivities.size();
+        int completed = (int) todaysActivities.stream()
+                .filter(DailyActivity::getIsComplete)
+                .count();
+
+        double percentage = total == 0 ? 0 : (completed * 100.0 / total);
+
+        return new ProgressDTO(total, completed, percentage);
     }
 
     public void createActivitiesForDateIfMissing(LocalDate date) {
