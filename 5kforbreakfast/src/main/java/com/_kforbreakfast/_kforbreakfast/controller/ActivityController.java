@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/activities")
 public class ActivityController {
 
@@ -31,12 +32,12 @@ public class ActivityController {
         return dailyActivityService.progressToday();
     }
 
-    @PostMapping("/complete")
+    @PostMapping("today/complete")
     public DailyActivityDTO markComplete(@RequestBody CompleteActivityRequest request){
         return dailyActivityService.markComplete(request.date(), request.activityId());
     }
 
-    @PostMapping("/uncomplete")
+    @PostMapping("today/uncomplete")
     public DailyActivityDTO markUnComplete(@RequestBody CompleteActivityRequest request){
         return dailyActivityService.markUnComplete(request.date(), request.activityId());
     }
