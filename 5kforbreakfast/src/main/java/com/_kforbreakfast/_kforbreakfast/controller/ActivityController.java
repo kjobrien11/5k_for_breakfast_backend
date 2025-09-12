@@ -41,4 +41,9 @@ public class ActivityController {
     public DailyActivityDTO markUnComplete(@RequestBody CompleteActivityRequest request){
         return dailyActivityService.markUnComplete(request.date(), request.activityId());
     }
+
+    @GetMapping("/streak")
+    public int getStreak(){
+        return  dailyActivityService.calculateStreak();
+    }
 }

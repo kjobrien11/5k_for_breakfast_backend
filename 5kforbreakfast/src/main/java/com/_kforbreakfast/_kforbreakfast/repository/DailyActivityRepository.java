@@ -12,6 +12,7 @@ public interface DailyActivityRepository extends JpaRepository<DailyActivity, Lo
     Optional<DailyActivity> findByDateAndActivityId(LocalDate date, Long activityId);
     List<DailyActivity> findByDate(LocalDate date);
     boolean existsByDate(LocalDate date);
+    List<DailyActivity> findAllByOrderByDateDesc();
 }
 
 

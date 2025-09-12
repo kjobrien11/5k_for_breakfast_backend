@@ -7,6 +7,7 @@ import com._kforbreakfast._kforbreakfast.model.Activity;
 import com._kforbreakfast._kforbreakfast.model.DailyActivity;
 import com._kforbreakfast._kforbreakfast.repository.ActivityRepository;
 import com._kforbreakfast._kforbreakfast.repository.DailyActivityRepository;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,6 +17,8 @@ import java.util.List;
 
 @Service
 public class DailyActivityService {
+
+    private final int ACTIVITIES_PER_DAY = 5;
 
     @Autowired
     private DailyActivityRepository dailyActivityRepository;
@@ -92,6 +95,41 @@ public class DailyActivityService {
 
         return new ProgressDTO(total, completed, percentage);
     }
+
+    public int calculateStreak() {
+        List<DailyActivity> activities = dailyActivityRepository.findAllByOrderByDateDesc();
+        if (activities.isEmpty()) return 0;
+
+        int streak = 0;
+        int dayActivityCount = 0;
+        LocalDate currentDay = activities.getFirst().getDate();
+        LocalDate today = LocalDate.now();
+
+        for (DailyActivity da : activities) {
+            if (!da.getDate().equals(currentDay)) {
+                if (dayActivityCount == ACTIVITIES_PER_DAY) {
+                    streak++;
+                } else if(!da.getDate().equals(today.minusDays(1))) {
+                    break;
+                }
+                currentDay = da.getDate();
+                dayActivityCount = 0;
+            }
+
+            if (da.getIsComplete()) {
+                dayActivityCount++;
+            }
+        }
+
+        if (dayActivityCount == ACTIVITIES_PER_DAY) {
+            streak++;
+        }
+
+        return streak;
+    }
+
+
+
 
     public void createActivitiesForDateIfMissing(LocalDate date) {
         boolean exists = dailyActivityRepository.existsByDate(date);
