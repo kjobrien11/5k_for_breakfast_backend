@@ -3,6 +3,7 @@ package com._kforbreakfast._kforbreakfast.controller;
 import com._kforbreakfast._kforbreakfast.DTO.CompleteActivityRequest;
 import com._kforbreakfast._kforbreakfast.DTO.DailyActivityDTO;
 import com._kforbreakfast._kforbreakfast.DTO.ProgressDTO;
+import com._kforbreakfast._kforbreakfast.DTO.WeekHistoryDTO;
 import com._kforbreakfast._kforbreakfast.service.DailyActivityService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,11 @@ public class ActivityController {
     @GetMapping("/today")
     public List<DailyActivityDTO> getTodaysActivities() {
         return dailyActivityService.getTodaysActivities();
+    }
+
+    @GetMapping("/last-eight-days")
+    public List<WeekHistoryDTO> getLastSevenDaysActivities() {
+        return dailyActivityService.getLastSevenDaysActivities();
     }
 
     @GetMapping("/today/progress")

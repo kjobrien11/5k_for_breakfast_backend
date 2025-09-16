@@ -3,6 +3,7 @@ package com._kforbreakfast._kforbreakfast.service;
 import com._kforbreakfast._kforbreakfast.DTO.ActivityDTO;
 import com._kforbreakfast._kforbreakfast.DTO.DailyActivityDTO;
 import com._kforbreakfast._kforbreakfast.DTO.ProgressDTO;
+import com._kforbreakfast._kforbreakfast.DTO.WeekHistoryDTO;
 import com._kforbreakfast._kforbreakfast.model.Activity;
 import com._kforbreakfast._kforbreakfast.model.DailyActivity;
 import com._kforbreakfast._kforbreakfast.repository.ActivityRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -129,6 +131,26 @@ public class DailyActivityService {
     }
 
 
+    public List<WeekHistoryDTO> getLastSevenDaysActivities(){
+        LocalDate today = LocalDate.now();
+        List<DailyActivity> lastSevenDays = dailyActivityRepository.findByDateBetweenOrderByDateAsc(today.minusDays(7),today.minusDays(1));
+        List<WeekHistoryDTO>  daysStats = new ArrayList<>();
+
+        for (int i = 0; i < lastSevenDays.size(); i=i+5) {
+            String dayOfWeek = lastSevenDays.get(i).getDate().getDayOfWeek().toString();
+            LocalDate date = lastSevenDays.get(i).getDate();
+            int activitiesComplete = 0;
+            for(int j = 0; j < 5; j++) {
+                if(lastSevenDays.get(j+i).getIsComplete()){
+                    activitiesComplete++;
+                }
+            }
+            activitiesComplete = activitiesComplete *20;
+            daysStats.add(new WeekHistoryDTO(dayOfWeek, date, activitiesComplete));
+        }
+
+        return daysStats;
+    }
 
 
     public void createActivitiesForDateIfMissing(LocalDate date) {
