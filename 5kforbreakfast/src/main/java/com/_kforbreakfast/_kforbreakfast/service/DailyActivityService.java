@@ -1,9 +1,6 @@
 package com._kforbreakfast._kforbreakfast.service;
 
-import com._kforbreakfast._kforbreakfast.DTO.ActivityDTO;
-import com._kforbreakfast._kforbreakfast.DTO.DailyActivityDTO;
-import com._kforbreakfast._kforbreakfast.DTO.ProgressDTO;
-import com._kforbreakfast._kforbreakfast.DTO.WeekHistoryDTO;
+import com._kforbreakfast._kforbreakfast.DTO.*;
 import com._kforbreakfast._kforbreakfast.model.Activity;
 import com._kforbreakfast._kforbreakfast.model.DailyActivity;
 import com._kforbreakfast._kforbreakfast.repository.ActivityRepository;
@@ -130,10 +127,51 @@ public class DailyActivityService {
         return streak;
     }
 
+    public List<LocalDate> getLastSevenDaysDates(){
+        LocalDate today = LocalDate.now();
+        List<DailyActivity> lastSevenDays = dailyActivityRepository.findByDateBetweenOrderByDateAscActivityTitleAsc(today.minusDays(7),today.minusDays(1));
+        List<LocalDate> lastSevenDaysDates = new ArrayList<>();
+        for (int i = 0; i < lastSevenDays.size(); i=i+5) {
+            lastSevenDaysDates.add(lastSevenDays.get(i).getDate());
+        }
+        return lastSevenDaysDates;
+    }
+
+    public List<SevenDayBreakdownDTO> getLastSevenDaysBreakdown(){
+        LocalDate today = LocalDate.now();
+        List<DailyActivity> lastSevenDays = dailyActivityRepository.findByDateBetweenOrderByDateAscActivityTitleAsc(today.minusDays(7),today.minusDays(1));
+        List<SevenDayBreakdownDTO>  sevenDayBreakdown = new ArrayList<>();
+        System.out.println();
+        for (int i = 0; i < lastSevenDays.size(); i++) {
+            System.out.println(lastSevenDays.get(i).getActivity().getTitle());
+        }
+
+
+        for (int i = 0; i < 5; i++) {
+            String currentActivityName = lastSevenDays.get(i).getActivity().getTitle();
+            int currentPercentage = 0;
+            List<Boolean> completion = new ArrayList<>();
+            for(int j = 0; j < lastSevenDays.size(); j=j+5) {
+                if(lastSevenDays.get(j+i).getIsComplete()){
+                    System.out.println(lastSevenDays.get(j+i).getActivity().getTitle());
+                    currentPercentage++;
+                    completion.add(true);
+                }else{
+                    completion.add(false);
+                }
+            }
+            currentPercentage = (int) ((currentPercentage / 7.0) * 100);
+            sevenDayBreakdown.add(new SevenDayBreakdownDTO(currentActivityName, currentPercentage, completion));
+
+        }
+
+        return sevenDayBreakdown;
+    }
+
 
     public List<WeekHistoryDTO> getLastSevenDaysActivities(){
         LocalDate today = LocalDate.now();
-        List<DailyActivity> lastSevenDays = dailyActivityRepository.findByDateBetweenOrderByDateAsc(today.minusDays(7),today.minusDays(1));
+        List<DailyActivity> lastSevenDays = dailyActivityRepository.findByDateBetweenOrderByDateAscActivityTitleAsc(today.minusDays(7),today.minusDays(1));
         List<WeekHistoryDTO>  daysStats = new ArrayList<>();
 
         for (int i = 0; i < lastSevenDays.size(); i=i+5) {

@@ -13,7 +13,7 @@ public interface DailyActivityRepository extends JpaRepository<DailyActivity, Lo
     List<DailyActivity> findByDate(LocalDate date);
     boolean existsByDate(LocalDate date);
     List<DailyActivity> findAllByOrderByDateDesc();
-    List<DailyActivity> findByDateBetweenOrderByDateAsc(LocalDate startDate, LocalDate endDate);
+    List<DailyActivity> findByDateBetweenOrderByDateAscActivityTitleAsc(LocalDate startDate, LocalDate endDate);
 }
 
 

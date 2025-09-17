@@ -1,13 +1,11 @@
 package com._kforbreakfast._kforbreakfast.controller;
 
-import com._kforbreakfast._kforbreakfast.DTO.CompleteActivityRequest;
-import com._kforbreakfast._kforbreakfast.DTO.DailyActivityDTO;
-import com._kforbreakfast._kforbreakfast.DTO.ProgressDTO;
-import com._kforbreakfast._kforbreakfast.DTO.WeekHistoryDTO;
+import com._kforbreakfast._kforbreakfast.DTO.*;
 import com._kforbreakfast._kforbreakfast.service.DailyActivityService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -28,9 +26,19 @@ public class ActivityController {
         return dailyActivityService.getTodaysActivities();
     }
 
-    @GetMapping("/last-eight-days")
+    @GetMapping("/last-seven-days")
     public List<WeekHistoryDTO> getLastSevenDaysActivities() {
         return dailyActivityService.getLastSevenDaysActivities();
+    }
+
+    @GetMapping("/last-seven-days-dates")
+    public List<LocalDate> getLastSevenDaysDates() {
+        return dailyActivityService.getLastSevenDaysDates();
+    }
+
+    @GetMapping("/last-seven-days-breakdown")
+    public List<SevenDayBreakdownDTO> getLastSevenDaysBreakdown() {
+        return dailyActivityService.getLastSevenDaysBreakdown();
     }
 
     @GetMapping("/today/progress")
