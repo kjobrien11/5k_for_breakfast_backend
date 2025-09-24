@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -188,6 +189,18 @@ public class DailyActivityService {
         }
 
         return daysStats;
+    }
+
+    public DailyActivityDTO updateActivity(LocalDate date, Long activityId, boolean complete) {
+        Optional<DailyActivity> activityToUpdate = dailyActivityRepository.findByDateAndActivityId(date, activityId);
+
+        if(activityToUpdate.isPresent()) {
+            activityToUpdate.get().setIsComplete(complete);
+            dailyActivityRepository.save(activityToUpdate.get());
+            return toDTO(activityToUpdate.get());
+        }
+        System.out.println("COULD NO FIND");
+        return null;
     }
 
 

@@ -1,7 +1,9 @@
 package com._kforbreakfast._kforbreakfast.controller;
 
 import com._kforbreakfast._kforbreakfast.DTO.*;
+import com._kforbreakfast._kforbreakfast.model.DailyActivity;
 import com._kforbreakfast._kforbreakfast.service.DailyActivityService;
+import org.hibernate.sql.Update;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -46,14 +48,19 @@ public class ActivityController {
         return dailyActivityService.progressToday();
     }
 
-    @PostMapping("today/complete")
+    @PostMapping("/today/complete")
     public DailyActivityDTO markComplete(@RequestBody CompleteActivityRequest request){
         return dailyActivityService.markComplete(request.date(), request.activityId());
     }
 
-    @PostMapping("today/uncomplete")
+    @PostMapping("/today/uncomplete")
     public DailyActivityDTO markUnComplete(@RequestBody CompleteActivityRequest request){
         return dailyActivityService.markUnComplete(request.date(), request.activityId());
+    }
+
+    @PostMapping("/update")
+    public DailyActivityDTO updateActivity(@RequestBody UpdateActivityDTO request){
+        return dailyActivityService.updateActivity(request.date(), request.activityId(), request.complete());
     }
 
     @GetMapping("/streak")
