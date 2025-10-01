@@ -30,7 +30,12 @@ public class ActivityController {
 
     @GetMapping("/last-seven-days")
     public List<WeekHistoryDTO> getLastSevenDaysActivities() {
-        return dailyActivityService.getLastSevenDaysActivities();
+        return dailyActivityService.getLastNDaysActivities(7);
+    }
+
+    @GetMapping("/last-28-days")
+    public List<WeekHistoryDTO> getLast28DaysBreakdown() {
+        return dailyActivityService.getLastNDaysActivities(28);
     }
 
     @GetMapping("/last-seven-days-dates")
@@ -42,6 +47,8 @@ public class ActivityController {
     public List<SevenDayBreakdownDTO> getLastSevenDaysBreakdown() {
         return dailyActivityService.getLastSevenDaysBreakdown();
     }
+
+
 
     @GetMapping("/today/progress")
     public ProgressDTO progressToday() {

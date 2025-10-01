@@ -170,9 +170,9 @@ public class DailyActivityService {
     }
 
 
-    public List<WeekHistoryDTO> getLastSevenDaysActivities(){
+    public List<WeekHistoryDTO> getLastNDaysActivities(int days){
         LocalDate today = LocalDate.now();
-        List<DailyActivity> lastSevenDays = dailyActivityRepository.findByDateBetweenOrderByDateAscActivityTitleAsc(today.minusDays(7),today.minusDays(1));
+        List<DailyActivity> lastSevenDays = dailyActivityRepository.findByDateBetweenOrderByDateAscActivityTitleAsc(today.minusDays(days),today.minusDays(1));
         List<WeekHistoryDTO>  daysStats = new ArrayList<>();
 
         for (int i = 0; i < lastSevenDays.size(); i=i+5) {
