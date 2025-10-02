@@ -5,7 +5,6 @@ import com._kforbreakfast._kforbreakfast.model.Activity;
 import com._kforbreakfast._kforbreakfast.model.DailyActivity;
 import com._kforbreakfast._kforbreakfast.repository.ActivityRepository;
 import com._kforbreakfast._kforbreakfast.repository.DailyActivityRepository;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
