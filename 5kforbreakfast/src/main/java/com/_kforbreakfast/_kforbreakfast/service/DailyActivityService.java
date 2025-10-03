@@ -220,6 +220,9 @@ public class DailyActivityService {
         List<DailyActivity> dailyActivities = dailyActivityRepository.findAllByOrderByDateAsc();
         Map<String, Double> averageCompletionByDay = new HashMap<>();
         Map<String, Integer> dayCounts = new HashMap<>();
+        List<String> dayOrder = Arrays.asList(
+                "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"
+        );
 
         for (DayOfWeek day : DayOfWeek.values()) {
             averageCompletionByDay.put(day.toString(), 0.0);
@@ -245,6 +248,7 @@ public class DailyActivityService {
             averageCompletionByDays.add(new AverageCompletionByDay(day, averagePercentage));
         }
 
+        averageCompletionByDays.sort(Comparator.comparingInt(d -> dayOrder.indexOf(d.dayOfWeek())));
         return averageCompletionByDays;
     }
 }
