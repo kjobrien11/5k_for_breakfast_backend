@@ -74,4 +74,9 @@ public class ActivityController {
     public int getStreak(){
         return  dailyActivityService.calculateStreak();
     }
+
+    @GetMapping("/average-completion-by-day")
+    public List<AverageCompletionByDay> getAverageCompletionByDay(){
+        return dailyActivityService.getAverageCompletionByDay();
+    }
 }

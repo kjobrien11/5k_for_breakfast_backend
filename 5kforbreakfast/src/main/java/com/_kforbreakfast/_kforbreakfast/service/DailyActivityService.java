@@ -8,10 +8,9 @@ import com._kforbreakfast._kforbreakfast.repository.DailyActivityRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -131,7 +130,7 @@ public class DailyActivityService {
         LocalDate today = LocalDate.now();
         List<DailyActivity> lastSevenDays = dailyActivityRepository.findByDateBetweenOrderByDateAscActivityTitleAsc(today.minusDays(7),today.minusDays(1));
         List<LocalDate> lastSevenDaysDates = new ArrayList<>();
-        for (int i = 0; i < lastSevenDays.size(); i=i+5) {
+        for (int i = 0; i < lastSevenDays.size(); i=i+ACTIVITIES_PER_DAY) {
             lastSevenDaysDates.add(lastSevenDays.get(i).getDate());
         }
         return lastSevenDaysDates;
@@ -147,11 +146,11 @@ public class DailyActivityService {
         }
 
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < ACTIVITIES_PER_DAY; i++) {
             String currentActivityName = lastSevenDays.get(i).getActivity().getTitle();
             int currentPercentage = 0;
             List<Boolean> completion = new ArrayList<>();
-            for(int j = 0; j < lastSevenDays.size(); j=j+5) {
+            for(int j = 0; j < lastSevenDays.size(); j=j+ACTIVITIES_PER_DAY) {
                 if(lastSevenDays.get(j+i).getIsComplete()){
                     System.out.println(lastSevenDays.get(j+i).getActivity().getTitle());
                     currentPercentage++;
@@ -174,11 +173,11 @@ public class DailyActivityService {
         List<DailyActivity> lastSevenDays = dailyActivityRepository.findByDateBetweenOrderByDateAscActivityTitleAsc(today.minusDays(days),today.minusDays(1));
         List<WeekHistoryDTO>  daysStats = new ArrayList<>();
 
-        for (int i = 0; i < lastSevenDays.size(); i=i+5) {
+        for (int i = 0; i < lastSevenDays.size(); i=i+ACTIVITIES_PER_DAY) {
             String dayOfWeek = lastSevenDays.get(i).getDate().getDayOfWeek().toString();
             LocalDate date = lastSevenDays.get(i).getDate();
             int activitiesComplete = 0;
-            for(int j = 0; j < 5; j++) {
+            for(int j = 0; j < ACTIVITIES_PER_DAY; j++) {
                 if(lastSevenDays.get(j+i).getIsComplete()){
                     activitiesComplete++;
                 }
@@ -215,5 +214,37 @@ public class DailyActivityService {
                 dailyActivityRepository.save(da);
             }
         }
+    }
+
+    public List<AverageCompletionByDay> getAverageCompletionByDay() {
+        List<DailyActivity> dailyActivities = dailyActivityRepository.findAllByOrderByDateAsc();
+        Map<String, Double> averageCompletionByDay = new HashMap<>();
+        Map<String, Integer> dayCounts = new HashMap<>();
+
+        for (DayOfWeek day : DayOfWeek.values()) {
+            averageCompletionByDay.put(day.toString(), 0.0);
+            dayCounts.put(day.toString(), 0);
+        }
+
+        for (int i = 0; i < dailyActivities.size(); i=i+ACTIVITIES_PER_DAY) {
+            double dayTotal = 0;
+            for(int j = 0; j < ACTIVITIES_PER_DAY; j++) {
+                dayTotal += dailyActivities.get(i+j).getIsComplete() ? 1 : 0;
+            }
+            String dayOfWeek = dailyActivities.get(i).getDate().getDayOfWeek().toString();
+            averageCompletionByDay.put(dayOfWeek, averageCompletionByDay.get(dayOfWeek) + dayTotal);
+            dayCounts.put(dayOfWeek, dayCounts.get(dayOfWeek) + 1);
+        }
+
+        List<AverageCompletionByDay> averageCompletionByDays = new ArrayList<>();
+        for (String day : averageCompletionByDay.keySet()) {
+            double total = averageCompletionByDay.get(day);
+            int count = dayCounts.get(day);
+            double averagePercentage = (count == 0) ? 0.0 : Math.round(((total / (count * ACTIVITIES_PER_DAY)) * 100) * 100.0) / 100.0;
+            System.out.println(day + " -> average completion: " + averagePercentage + "%");
+            averageCompletionByDays.add(new AverageCompletionByDay(day, averagePercentage));
+        }
+
+        return averageCompletionByDays;
     }
 }
