@@ -253,10 +253,40 @@ public class DailyActivityService {
     }
 
     public List<String> getTop3CompletedActivities(){
-        return null;
+        return calculateTopOrBottom3CompletedActivities(true);
     }
 
     public List<String> getBottom3CompletedActivities(){
-        return null;
+        return calculateTopOrBottom3CompletedActivities(false);
     }
+
+    private List<String> calculateTopOrBottom3CompletedActivities(boolean calculateTop3) {
+        List<DailyActivity> dailyActivities = dailyActivityRepository.findAllByOrderByDateAsc();
+        Map<String, Integer> activityCompletedCount = new HashMap<>();
+
+        for (int i = 0; i < dailyActivities.size(); i += ACTIVITIES_PER_DAY) {
+            for (int j = 0; j < ACTIVITIES_PER_DAY; j++) {
+                String title = dailyActivities.get(i + j).getActivity().getTitle();
+                int itemComplete = dailyActivities.get(i + j).getIsComplete() ? 1 : 0;
+                activityCompletedCount.merge(title, itemComplete, Integer::sum);
+            }
+        }
+
+        if (calculateTop3) {
+            return activityCompletedCount.entrySet().stream()
+                    .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
+                    .limit(3)
+                    .map(Map.Entry::getKey)
+                    .toList();
+        }else{
+            return activityCompletedCount.entrySet().stream()
+                    .sorted((e1, e2) -> e1.getValue().compareTo(e2.getValue()))
+                    .limit(3)
+                    .map(Map.Entry::getKey)
+                    .toList();
+        }
+
+
+    }
+
 }
