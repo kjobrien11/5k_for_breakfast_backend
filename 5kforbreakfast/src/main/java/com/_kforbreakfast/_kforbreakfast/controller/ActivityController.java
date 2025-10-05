@@ -79,4 +79,14 @@ public class ActivityController {
     public List<AverageCompletionByDay> getAverageCompletionByDay(){
         return dailyActivityService.getAverageCompletionByDay();
     }
+
+    @GetMapping("/top-3-completed")
+    public List<String> getTop3CompletedActivities(){
+        return dailyActivityService.getTop3CompletedActivities();
+    }
+
+    @GetMapping("/bottom-3-completed")
+    public List<String> getBottom3CompletedActivities(){
+        return dailyActivityService.getBottom3CompletedActivities();
+    }
 }

@@ -221,7 +221,7 @@ public class DailyActivityService {
         Map<String, Double> averageCompletionByDay = new HashMap<>();
         Map<String, Integer> dayCounts = new HashMap<>();
         List<String> dayOrder = Arrays.asList(
-                "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"
+                "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
         );
 
         for (DayOfWeek day : DayOfWeek.values()) {
@@ -243,12 +243,20 @@ public class DailyActivityService {
         for (String day : averageCompletionByDay.keySet()) {
             double total = averageCompletionByDay.get(day);
             int count = dayCounts.get(day);
-            double averagePercentage = (count == 0) ? 0.0 : Math.round(((total / (count * ACTIVITIES_PER_DAY)) * 100) * 100.0) / 100.0;
+            double averagePercentage = (count == 0) ? 0.0 : Math.round(((total / (count * ACTIVITIES_PER_DAY)) * 100) * 10.0) / 10.0;
             System.out.println(day + " -> average completion: " + averagePercentage + "%");
-            averageCompletionByDays.add(new AverageCompletionByDay(day, averagePercentage));
+            averageCompletionByDays.add(new AverageCompletionByDay(day.charAt(0) +day.substring(1).toLowerCase() , averagePercentage));
         }
 
         averageCompletionByDays.sort(Comparator.comparingInt(d -> dayOrder.indexOf(d.dayOfWeek())));
         return averageCompletionByDays;
+    }
+
+    public List<String> getTop3CompletedActivities(){
+        return null;
+    }
+
+    public List<String> getBottom3CompletedActivities(){
+        return null;
     }
 }

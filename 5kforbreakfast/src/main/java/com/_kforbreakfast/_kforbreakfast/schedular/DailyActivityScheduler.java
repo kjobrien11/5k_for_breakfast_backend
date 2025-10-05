@@ -15,7 +15,7 @@ public class DailyActivityScheduler {
         this.dailyActivityService = dailyActivityService;
     }
 
-    @Scheduled(cron = "0 24 8 * * ?")
+    @Scheduled(cron = "40 21 12 * * ?")
     public void generateDailyActivities() {
         LocalDate today = LocalDate.now();
         dailyActivityService.createActivitiesForDateIfMissing(today);
