@@ -75,6 +75,11 @@ public class ActivityController {
         return  dailyActivityService.calculateStreak();
     }
 
+    @GetMapping("/longest-streak")
+    public int getLongestStreak(){
+        return  dailyActivityService.calculateLongestStreak();
+    }
+
     @GetMapping("/average-completion-by-day")
     public List<AverageCompletionByDay> getAverageCompletionByDay(){
         return dailyActivityService.getAverageCompletionByDay();

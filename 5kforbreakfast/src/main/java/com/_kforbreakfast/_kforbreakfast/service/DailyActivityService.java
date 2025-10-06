@@ -126,6 +126,42 @@ public class DailyActivityService {
         return streak;
     }
 
+    public int calculateLongestStreak() {
+        List<DailyActivity> activities = dailyActivityRepository.findAllByOrderByDateDesc();
+        if (activities.isEmpty()) return 0;
+
+        int streak = 0;
+        int longestStreak = 0;
+        int dayActivityCount = 0;
+        LocalDate currentDay = activities.getFirst().getDate();
+
+        for (DailyActivity da : activities) {
+            if (!da.getDate().equals(currentDay)) {
+                if (dayActivityCount == ACTIVITIES_PER_DAY) {
+                    streak++;
+                }else{
+                    if(streak > longestStreak){
+                        longestStreak = streak;
+                    }
+                    streak = 0;
+                }
+                currentDay = da.getDate();
+                dayActivityCount = 0;
+            }
+
+            if (da.getIsComplete()) {
+                dayActivityCount++;
+            }
+            System.out.println(da.getDate());
+
+        }
+        if (dayActivityCount == ACTIVITIES_PER_DAY) {
+            streak++;
+        }
+
+        return longestStreak;
+    }
+
     public List<LocalDate> getLastSevenDaysDates(){
         LocalDate today = LocalDate.now();
         List<DailyActivity> lastSevenDays = dailyActivityRepository.findByDateBetweenOrderByDateAscActivityTitleAsc(today.minusDays(7),today.minusDays(1));
