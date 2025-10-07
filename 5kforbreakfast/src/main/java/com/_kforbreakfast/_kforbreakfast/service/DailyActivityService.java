@@ -325,4 +325,32 @@ public class DailyActivityService {
 
     }
 
+    public List<TotalCompletionsByActivityDTO> getTotalActivityCompletions() {
+        List<DailyActivity> dailyActivities = dailyActivityRepository.findAllByOrderByDateAsc();
+        Map<String, Integer> activityCompletedCount = new HashMap<>();
+        LocalDate firstDate = dailyActivities.get(0).getDate();
+        int index = 0;
+        while(dailyActivities.get(index).getDate().equals(firstDate)){
+            activityCompletedCount.put(dailyActivities.get(index).getActivity().getTitle(), 0);
+            index++;
+        }
+        for (DailyActivity dailyActivity : dailyActivities) {
+            int itemComplete = dailyActivity.getIsComplete() ? 1 : 0;
+            activityCompletedCount.merge(dailyActivity.getActivity().getTitle(), itemComplete, Integer::sum);
+        }
+        List<TotalCompletionsByActivityDTO> totalCompletionsByActivityDTOs = new ArrayList<>();
+
+        for (Map.Entry<String, Integer> entry : activityCompletedCount.entrySet()) {
+            String activityTitle = entry.getKey();
+            Integer activityCount = entry.getValue();
+            double totalDays = (double) dailyActivities.size() / ACTIVITIES_PER_DAY;
+            double percentage = (activityCount / totalDays) * 100;
+            totalCompletionsByActivityDTOs.add(new TotalCompletionsByActivityDTO(activityTitle, activityCount, percentage));
+
+        }
+        System.out.println(dailyActivities.size());
+
+        System.out.println(activityCompletedCount.entrySet());
+        return totalCompletionsByActivityDTOs;
+    }
 }

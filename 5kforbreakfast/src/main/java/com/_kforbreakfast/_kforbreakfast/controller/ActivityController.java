@@ -48,8 +48,6 @@ public class ActivityController {
         return dailyActivityService.getLastSevenDaysBreakdown();
     }
 
-
-
     @GetMapping("/today/progress")
     public ProgressDTO progressToday() {
         return dailyActivityService.progressToday();
@@ -93,5 +91,10 @@ public class ActivityController {
     @GetMapping("/bottom-3-completed")
     public List<String> getBottom3CompletedActivities(){
         return dailyActivityService.getBottom3CompletedActivities();
+    }
+
+    @GetMapping("/total-activity-completions")
+    public List<TotalCompletionsByActivityDTO> getTotalActivityCompletions(){
+        return dailyActivityService.getTotalActivityCompletions();
     }
 }
