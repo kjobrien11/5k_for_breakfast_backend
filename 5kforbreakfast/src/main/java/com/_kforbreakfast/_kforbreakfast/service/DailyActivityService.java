@@ -344,13 +344,25 @@ public class DailyActivityService {
             String activityTitle = entry.getKey();
             Integer activityCount = entry.getValue();
             double totalDays = (double) dailyActivities.size() / ACTIVITIES_PER_DAY;
-            double percentage = (activityCount / totalDays) * 100;
+            double percentage = Math.round((activityCount / totalDays) *100 * 100) / 100.0;
             totalCompletionsByActivityDTOs.add(new TotalCompletionsByActivityDTO(activityTitle, activityCount, percentage));
 
         }
-        System.out.println(dailyActivities.size());
 
-        System.out.println(activityCompletedCount.entrySet());
+        totalCompletionsByActivityDTOs.sort(
+                Comparator.comparingDouble(TotalCompletionsByActivityDTO::percentage).reversed()
+        );
         return totalCompletionsByActivityDTOs;
+    }
+
+    public List<ActivityStatusDTO> getStatsForDay(LocalDate date) {
+        List<DailyActivity> dailyActivities = dailyActivityRepository.findByDate(date);
+        System.out.println(date);
+        List<ActivityStatusDTO> activityStatusDTOs = new ArrayList<>();
+
+        for (DailyActivity dailyActivity : dailyActivities) {
+            activityStatusDTOs.add(new ActivityStatusDTO(dailyActivity.getActivity().getTitle(), dailyActivity.getIsComplete()));
+        }
+        return activityStatusDTOs;
     }
 }

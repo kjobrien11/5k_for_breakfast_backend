@@ -4,6 +4,7 @@ import com._kforbreakfast._kforbreakfast.DTO.*;
 import com._kforbreakfast._kforbreakfast.model.DailyActivity;
 import com._kforbreakfast._kforbreakfast.service.DailyActivityService;
 import org.hibernate.sql.Update;
+import org.springframework.cglib.core.Local;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -97,4 +98,11 @@ public class ActivityController {
     public List<TotalCompletionsByActivityDTO> getTotalActivityCompletions(){
         return dailyActivityService.getTotalActivityCompletions();
     }
+
+    @GetMapping("/stats-for-day")
+    public List<ActivityStatusDTO> getStatsForDay(@RequestBody LocalDate date){
+        return dailyActivityService.getStatsForDay(date);
+    }
+
+
 }
